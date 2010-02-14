@@ -13,7 +13,8 @@ end
 
 # Gems
 require "rubygems"
-require "activeresource"
+require "active_support"
+require "active_resource"
 require "active_resource_throttle"
 
 # Plugins

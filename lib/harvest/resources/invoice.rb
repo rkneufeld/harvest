@@ -4,6 +4,12 @@ module Harvest
     class Invoice < Harvest::HarvestResource
       self.element_name = 'invoice'
 
+      def mark_as_closed
+        message = InvoiceMessage.new
+        message.attributes = { :invoice_id => self.id, :state => 'mark_as_closed' }
+        message.save
+      end
+
       def parsed_line_items
         headers = nil
         entries = []

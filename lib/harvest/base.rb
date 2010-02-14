@@ -4,7 +4,6 @@ module Harvest
     # Requires a sub_domain, email, and password.
     # Specifying headers is optional, but useful for setting a user agent.
     def initialize(options={})
-      options.assert_valid_keys(:email, :password, :sub_domain, :headers, :ssl)
       options.assert_required_keys(:email, :password, :sub_domain)
       @email        = options[:email]
       @password     = options[:password]
@@ -20,6 +19,11 @@ module Harvest
     # Clients
     def clients
       Harvest::Resources::Client
+    end
+
+    # Contacts
+    def contacts
+      Harvest::Resources::Contact
     end
     
     # Expenses.
@@ -53,6 +57,11 @@ module Harvest
     # Invoices
     def invoices
       Harvest::Resources::Invoice
+    end
+
+    # Invoice Messages
+    def invoice_messages
+      Harvest::Resources::InvoiceMessage
     end
 
     private
