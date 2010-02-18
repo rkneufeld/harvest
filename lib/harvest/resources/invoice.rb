@@ -10,6 +10,12 @@ module Harvest
         message.save
       end
 
+      def pay_amount(amount, message = nil)
+        payment = InvoicePayment.new
+        payment.attributes = { :invoice_id => self.id, :amount => amount, :message => message }
+        payment.save
+      end
+
       def parsed_line_items
         headers = nil
         entries = []
