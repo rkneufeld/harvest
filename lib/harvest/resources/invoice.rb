@@ -10,9 +10,9 @@ module Harvest
         message.save
       end
 
-      def make_payment(amount, message = nil)
+      def make_payment(options = {})
         payment = InvoicePayment.new
-        payment.attributes = { :invoice_id => self.id, :amount => amount, :message => message }
+        payment.attributes = { :invoice_id => self.id, :amount => options[:amount], :notes => options[:notes], :paid_at => options[:paid_at] || Time.now.utc }
         payment.save
       end
 
