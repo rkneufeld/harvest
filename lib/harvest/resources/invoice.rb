@@ -10,7 +10,7 @@ module Harvest
         message.save
       end
 
-      def pay_amount(amount, message = nil)
+      def make_payment(amount, message = nil)
         payment = InvoicePayment.new
         payment.attributes = { :invoice_id => self.id, :amount => amount, :message => message }
         payment.save
