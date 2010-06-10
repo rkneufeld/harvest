@@ -31,6 +31,14 @@ module Harvest
         entries
       end
 
+      def messages
+        InvoiceMessage.find(:all, :from => "/invoices/#{self.id}/messages")
+      end
+
+      def payments
+        InvoiceMessage.find(:all, :from => "/invoices/#{self.id}/payments")
+      end
+
       class << self
         def find_by_number number
           i = find(:all).find{|i|i.number.to_s == number.to_s}
