@@ -31,10 +31,12 @@ module Harvest
             end
           end
         else 
-          entry = {}
           rows = CSV.parse(csv_line_items)
           rows[1..-1].each do |row| 
-            row.each_with_index{|c,i|entry[rows[0][i]] = c}
+            entry = {}
+            row.each_with_index do |c,i|
+              entry[rows[0][i]] = c
+            end
             entries << entry
           end
         end
