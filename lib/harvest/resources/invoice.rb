@@ -19,24 +19,70 @@ module Harvest
       def parsed_line_items
         headers = nil
         entries = []
-        CSV::Reader.parse(csv_line_items) do |row|
-          unless headers
-            headers = row
-          else
-            entry = {}
-            row.each_with_index{|c,i|entry[headers[i]] = c}
+        
+        if defined? CSV::Reader
+          CSV::Reader.parse(csv_line_items) do |row|
+            if headers
+              headers = row
+            else
+              entry = {}
+              row.each_with_index{|c,i|entry[headers[i]] = c}
+              entries << entry
+            end
+          end
+        else 
+          entry = {}
+          rows = CSV.parse(csv_line_items)
+          rows[1..-1].each do |row| 
+            row.each_with_index{|c,i|entry[rows[0][i]] = c}
             entries << entry
           end
         end
         entries
       end
 
-      def messages
-        InvoiceMessage.find(:all, :from => "/invoices/#{self.id}/messages")
+      def balance
+        due_amount
+      end
+      
+      def paid_amount
+        amount - due_amount
+      end
+      
+      def sent?
+        not state == 'draft'
+      end
+      
+      def late?
+        (not paid?) and (Time.now > due_at)
+      end
+            
+      def paid?
+        state == 'paid' || balance <= 0
+      end
+      
+      def paid_in_full_payment
+        full = amount
+        payments.each do |payment|
+          full -= payment.amount
+          return payment if full <= 0
+        end
+        
+        nil
+      end
+      
+      def paid_at
+        paid_in_full_payment ? paid_in_full_payment.paid_at : nil
       end
 
-      def payments
-        InvoiceMessage.find(:all, :from => "/invoices/#{self.id}/payments")
+      def messages(refresh = false)
+        @messages = nil if refresh
+        @messages ||= InvoiceMessage.find(:all, :from => "/invoices/#{self.id}/messages")
+      end
+
+      def payments(refresh = false)
+        @payments = nil if refresh
+        @payments ||= InvoiceMessage.find(:all, :from => "/invoices/#{self.id}/payments")
       end
 
       class << self

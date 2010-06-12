@@ -1,5 +1,37 @@
 module Harvest
   class Base
+    @debug_level = 0
+
+    def self.debug_level
+      @debug_level
+    end
+    
+    def self.debug_level=(debug_level)
+      raise ArgumentError, "debug level must be an integer" unless debug_level == debug_level.to_i
+
+      return @debug_level if @debug_level == debug_level
+
+      @debug_level = debug_level.to_i
+
+      ActiveSupport::Notifications.unsubscribe(@subscriber) if @subscriber
+
+      case @debug_level
+      when 0 then
+      when 1 then
+        @subscriber = ActiveSupport::Notifications.subscribe(/request.active_resource/) do |*args|
+          event = ActiveSupport::Notifications::Event.new(*args)
+          puts "-- HARVEST #{event.payload[:method].to_s.upcase} #{event.payload[:request_uri]}, #{event.payload[:result].andand.code}: #{event.payload[:result].andand.message}"
+        end
+      else
+        @subscriber = ActiveSupport::Notifications.subscribe(/request.active_resource/) do |*args|
+          event = ActiveSupport::Notifications::Event.new(*args)
+          puts "-- HARVEST #{event.payload[:method].to_s.upcase} #{event.payload[:request_uri]}, #{event.payload[:result].andand.code}: #{event.payload[:result].andand.message}"
+          puts event.payload[:result].body + "\n"
+        end
+      end
+      
+      @debug_level
+    end
    
     # Requires a sub_domain, email, and password.
     # Specifying headers is optional, but useful for setting a user agent.
