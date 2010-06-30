@@ -1,5 +1,5 @@
 module Harvest
-  VERSION   = "0.8"
+  VERSION   = "0.8.rails3"
   ApiDomain = "harvestapp.com"
   
   # Class method to load all ruby files from a given path.
@@ -13,7 +13,7 @@ end
 
 # Gems
 require "rubygems"
-require "activeresource"
+require "active_resource"
 require "active_resource_throttle"
 
 # Plugins
