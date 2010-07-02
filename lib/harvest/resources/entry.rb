@@ -33,7 +33,7 @@ module Harvest
           self.site = self.site + "/tasks/#{@task_id}"
         end
         
-        def person_id
+        def task_id
           @task_id
         end
         
