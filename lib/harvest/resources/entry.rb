@@ -27,6 +27,16 @@ module Harvest
           @person_id
         end
         
+        
+        def task_id=(id)
+          @task_id = id
+          self.site = self.site + "/tasks/#{@task_id}"
+        end
+        
+        def person_id
+          @task_id
+        end
+        
       end
                   
     end
