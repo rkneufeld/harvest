@@ -7,6 +7,16 @@ module Harvest
       
       self.element_name = "entry"
 
+      def people
+        user_class = Harvest::Resources::Person.clone
+        user_class.find @person_id
+      end
+      
+      def tasks
+        task_class = Harvest::Resources::Task.clone
+        task_class.find @task_id
+      end
+      
       class << self
         
         def project_id=(id)
