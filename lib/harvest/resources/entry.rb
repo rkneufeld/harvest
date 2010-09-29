@@ -7,6 +7,16 @@ module Harvest
       
       self.element_name = "entry"
 
+      def people
+        user_class = Harvest::Resources::Person.clone
+        user_class.find @person_id
+      end
+      
+      def tasks
+        task_class = Harvest::Resources::Task.clone
+        task_class.find @task_id
+      end
+      
       class << self
         
         def project_id=(id)
@@ -25,6 +35,16 @@ module Harvest
         
         def person_id
           @person_id
+        end
+        
+        
+        def task_id=(id)
+          @task_id = id
+          self.site = self.site + "/tasks/#{@task_id}"
+        end
+        
+        def task_id
+          @task_id
         end
         
       end

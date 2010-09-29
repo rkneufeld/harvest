@@ -2,7 +2,7 @@
  
  Gem::Specification.new do |s|
   s.name        = "harvest"
-  s.version     = "0.8.2"
+  s.version     = "0.8.2.rails3"
   s.authors     = ["Kyle Banker", "Alexander Interactive, Inc."]
   s.date        = "2008-12-17"
   s.summary     = "A wrapper for the Harvest Api.  See http://getharvest.com/api for details."
@@ -15,5 +15,5 @@
   s.extra_rdoc_files = ["README.rdoc"]
   s.rdoc_options = ["--main", "README.rdoc"]
   s.add_dependency("activeresource", [">= 2.1"])
-  s.add_dependency("aiaio-active_resource_throttle", [">= 1.0"])
+  s.add_dependency("active_resource_throttle", [">= 1.0"])
 end
