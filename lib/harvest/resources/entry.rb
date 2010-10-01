@@ -4,51 +4,31 @@
 module Harvest
   module Resources
     class Entry < Harvest::HarvestResource
-      
+      belongs_to :task
+      belongs_to :person, :foreign_key => :user_id
+
+      when_condition :project_id, :from => "/projects/:project_id/entries"
+      when_condition :person_id, :from => "/people/:person_id/entries"
+
       self.element_name = "entry"
 
-      def people
-        user_class = Harvest::Resources::Person.clone
-        user_class.find @person_id
+      def person(refresh = false)
+        @person = nil if refresh
+        @person ||= Harvest::Resources::Person.find(self.user_id)
+      end
+
+      def person=(person)
+        @person = person
       end
       
-      def tasks
-        task_class = Harvest::Resources::Task.clone
-        task_class.find @task_id
+      def task(refresh = false)
+        @task = nil if refresh
+        @task ||= Harvest::Resources::Task.find(self.task_id)
       end
       
-      class << self
-        
-        def project_id=(id)
-          @project_id = id
-          self.site = self.site + "/projects/#{@project_id}"
-        end
-        
-        def project_id
-          @project_id
-        end
-        
-        def person_id=(id)
-          @person_id = id
-          self.site = self.site + "/people/#{@person_id}"
-        end
-        
-        def person_id
-          @person_id
-        end
-        
-        
-        def task_id=(id)
-          @task_id = id
-          self.site = self.site + "/tasks/#{@task_id}"
-        end
-        
-        def task_id
-          @task_id
-        end
-        
-      end
-                  
+      def task=(task)
+        @task = task
+      end                  
     end
   end
 end

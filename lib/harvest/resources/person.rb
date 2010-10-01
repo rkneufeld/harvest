@@ -2,22 +2,29 @@ module Harvest
   module Resources
     class Person < Harvest::HarvestResource
       include Harvest::Plugins::Toggleable
+
+      self.element_name = "person"
+      
+      has_many :entries
+      has_many :expenses
       
       # Find all entries for the given person;
       # options[:from] and options[:to] are required;
       # include options[:user_id] to limit by a specific project.
       def entries(options={})
+        return @entries if @entries and options == {} 
         validate_options(options)
-        entry_class = Harvest::Resources::Entry.clone
-        entry_class.person_id = self.id
-        entry_class.find :all, :params => format_params(options)
+        @entries = Harvest::Resources::Entry.find(:all, :conditions => {:person_id => self.id}, :params => format_params(options))
       end
       
       def expenses(options={})
+        return @expenses if @expenses and options == {}
         validate_options(options)
-        expense_class = Harvest::Resources::Expense.clone
-        expense_class.person_id = self.id
-        expense_class.find :all, :params => format_params(options)
+        @expenses = Harvest::Resources::Expense.find(:all, :conditions => {:person_id => self.id}, :params => format_params(options))
+      end
+      
+      def name
+        "#{self.first_name} #{self.last_name}"
       end
       
       private

@@ -4,16 +4,18 @@ module Harvest
     class Project < Harvest::HarvestResource
       include Harvest::Plugins::Toggleable
       
-      def users
-        user_class = Harvest::Resources::UserAssignment.clone
-        user_class.project_id = self.id
-        user_class
+      self.element_name = "project"
+      
+      has_many :entries
+      has_many :users
+      has_many :tasks
+      
+      def users(options = {})
+        @users ||= Harvest::Resources::UserAssignment.find(:all, :include => options[:include], :conditions => {:project_id => self.id})
       end
       
-      def tasks
-        task_class = Harvest::Resources::TaskAssignment.clone
-        task_class.project_id = self.id
-        task_class
+      def tasks(options = {})
+        @tasks ||= Harvest::Resources::TaskAssignment.find(:all, :include => options[:include], :conditions => {:project_id => self.id})
       end
       
       # Find all entries for the given project;
@@ -21,10 +23,9 @@ module Harvest
       # include options[:user_id] to limit by a specific user.
       #   
       def entries(options={})
+        return @entries if @entries and options == {}
         validate_entries_options(options)
-        entry_class = Harvest::Resources::Entry.clone
-        entry_class.project_id = self.id
-        entry_class.find :all, :params => format_params(options)
+        @entries = Harvest::Resources::Entry.find(:all, :include => options[:include], :conditions => {:project_id => self.id}, :params => format_params(options))
       end
       
       private

@@ -2,26 +2,9 @@
 module Harvest
   module Resources
     class UserAssignment < Harvest::HarvestResource
-            
       self.element_name = "user_assignment"
       
-      class << self
-        
-        def project_id=(id)
-          @project_id = id
-          set_site
-        end
-        
-        def project_id
-          @project_id
-        end
-        
-        def set_site
-          self.site = self.site + "/projects/#{self.project_id}"
-        end
-        
-      end
-      
+      when_condition :project_id, :from => "/projects/:project_id/user_assignments"
     end
   end
 end
