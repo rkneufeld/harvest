@@ -2,8 +2,8 @@
  
  Gem::Specification.new do |s|
   s.name        = "harvest"
-  s.version     = "0.8.2.rails3"
-  s.authors     = ["Kyle Banker", "Alexander Interactive, Inc."]
+  s.version     = "0.9"
+  s.authors     = ["Kyle Banker", "Alexander Interactive, Inc.", "Symbolforce, LLC."]
   s.date        = "2008-12-17"
   s.summary     = "A wrapper for the Harvest Api.  See http://getharvest.com/api for details."
   s.homepage    = "http://github.com/aiaio/harvest"
