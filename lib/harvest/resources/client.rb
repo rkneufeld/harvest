@@ -3,6 +3,33 @@ module Harvest
     class Client < Harvest::HarvestResource
       include Harvest::Plugins::Toggleable
 
+      def build_contact(attributes = {})
+        contact = Contact.new
+        contact.attributes = attributes.merge({:client_id => self.id})
+        return contact
+      end
+
+      def contacts(refresh = false)
+        if not refresh and @contacts
+          @contacts
+        else
+           page, @contacts = 1, []
+           begin
+             set = Contact.find(:all, :params => {:client => self.id, :page => page})
+            puts "Found #{set.length.to_s} contacts" if Harvest::Base.debug_level == 2
+            @contacts += set
+            page +=1
+          end while set.length == 50
+        end
+        @contacts
+      end
+
+      def build_invoice(attributes = {})
+        invoice = Invoice.new
+        invoice.attributes = attributes.merge({:client_id => self.id})
+        return invoice
+      end
+
       def invoices(refresh = false)
         if not refresh and @invoices
           @invoices
