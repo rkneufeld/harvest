@@ -5,7 +5,7 @@ module Harvest
 
       def build_contact(attributes = {})
         contact = Contact.new
-        contact.attributes = attributes.merge({:client_id => self.id})
+        contact.attributes = attributes.merge({'client_id' => self.id})
         return contact
       end
 
@@ -26,7 +26,7 @@ module Harvest
 
       def build_invoice(attributes = {})
         invoice = Invoice.new
-        invoice.attributes = attributes.merge({:client_id => self.id})
+        invoice.attributes = attributes.merge({'client_id' => self.id})
         return invoice
       end
 
